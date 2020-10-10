@@ -1,0 +1,56 @@
+Inter-thread communication using piped streams in java:
+This topic has been a popular interview question for a long time.
+With the JDK 1.5 release, ExecutorService and BlockingQueue brought 
+another way of doing it more effectively,but this approach is also worth 
+knowing and might be useful in certain scenarios.
+
+Sections in this post:
+
+What are piped streams
+PipedReader and PipedWriter
+Running example
+Important notes
+
+What are piped streams:
+
+Pipe streams are just like real plumbing pipes.  You put things into to a pipe
+at one end -- using some methods.  Then you receive the same things back from 
+the pipe stream at the other end  -- using some other methods. They come out in
+FIFO order, first-in first-out, just like from real plumbing pipes.
+
+PipedReader and PipedWriter:
+
+PipedReader is an extension of Reader class which is used for reading character streams.
+Its read() method reads the connected PipedWriter’s stream. Similarly, PipedWriter is
+ an extension of Writer class and does all the things which Reader class contracts.
+
+A writer can be connected to a reader by following two methods:
+
+Using constructor PipedWriter(PipedReader pr)
+Using connect(PipedReader pr) method
+Once connected through any of above ways, any thread can write data in stream 
+using write(….) methods, and data will be available to reader and can be read using
+read() method.
+
+Running example:
+
+Below given sample program creates two threads. One thread is responsible for writing 
+into stream and second one is only reading the data to print them in console.
+
+
+
+Important notes:
+
+1)You cannot write to a pipe without having some sort of reader created and connected
+to it.  In other words, both ends must be present and already connected for the writing 
+end to work.
+2)You cannot switch to another reader, to which the pipe was not originally connected,
+ once you are done writing to a pipe.
+3)You cannot read back from the pipe if you close the reader. 
+You can close the writing end successfully, however, and still read from the pipe.
+4)You cannot read back from the pipe if the thread which wrote to it ends.
+
+
+
+
+

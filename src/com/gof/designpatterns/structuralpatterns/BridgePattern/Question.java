@@ -1,0 +1,16 @@
+package com.gof.designpatterns.structuralpatterns.BridgePattern;
+
+//Create a Question interface that provides the 
+//navigation from one question to another or 
+//vice-versa.
+
+//this is the Question interface.  
+public interface Question {  
+ public void nextQuestion();  
+ public void previousQuestion();  
+ public void newQuestion(String q);  
+ public void deleteQuestion(String q);  
+ public void displayQuestion();  
+ public void displayAllQuestions();  
+}  
+//End of the Question interface.  

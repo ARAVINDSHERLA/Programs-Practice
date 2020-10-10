@@ -1,0 +1,53 @@
+Difference between sleep() and wait()?
+
+sleep() is a method which is used to hold the process for few seconds
+or the time you wanted but in case of wait() method thread goes in waiting state 
+and it won’t come back automatically until we call the notify() or notifyAll().
+
+
+ 
+The major difference is that wait() releases the lock or monitor while sleep() 
+doesn’t releases any lock or monitor while waiting. Wait is used for inter-thread
+communication while sleep is used to introduce pause on execution, generally.
+
+Thread.sleep() sends the current thread into the “Not Runnable” state for some
+amount of time. The thread keeps the monitors it has acquired — i.e. if the thread
+is currently in a synchronized block or method no other thread can enter this block
+or method. If another thread calls t.interrupt() it will wake up the sleeping thread.
+Note that sleep is a static method, which means that it always affects the current 
+thread (the one that is executing the sleep method). A common mistake is to call
+t.sleep() where t is a different thread; even then, it is the current thread that 
+will sleep, not the t thread.
+
+object.wait() sends the current thread into the “Not Runnable” state, like sleep(),
+ but with a twist. Wait is called on an object, not a thread; we call this object the “lock object.” Before lock.wait() is called, the current thread must synchronize on the lock object; wait() then releases this lock, and adds the thread to the “wait list” associated with the lock. Later, another thread can synchronize on the same lock object and call lock.notify(). This wakes up the original, waiting thread. Basically, wait()/notify() is like sleep()/interrupt(), only the active thread does not need a direct pointer to the sleeping thread, but only to the shared lock object.
+
+synchronized(LOCK) {   
+    Thread.sleep(1000); // LOCK is held
+}
+
+synchronized(LOCK) {   
+    LOCK.wait(); // LOCK is not held
+}
+Let categorize all above points :
+
+Call on:
+
+    wait(): Call on an object; current thread must synchronize on the lock object.
+    sleep(): Call on a Thread; always currently executing thread.
+Synchronized:
+
+    wait(): when synchronized multiple threads access same Object one by one.
+    sleep(): when synchronized multiple threads wait for sleep over of sleeping thread.
+Hold lock:
+
+    wait(): release the lock for other objects to have chance to execute.
+    sleep(): keep lock for at least t times if timeout specified or somebody interrupt.
+Wake-up condition:
+
+    wait(): until call notify(), notifyAll() from object
+    sleep(): until at least time expire or call interrupt().
+Usage:
+
+    sleep(): for time-synchronization and;
+    wait(): for multi-thread-synchronization.
